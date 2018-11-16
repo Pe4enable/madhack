@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5242420c-97f8-4167-96c2-b87a34423194" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/madhack.iml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/application/controllers/getData.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/application/models/RosBankModel.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/application/routers/MadnessRouter.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/application/utils/sendRequest.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/application/utils/setHeaderAndWrite.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/config.json" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/main.go" />
-    </list>
+    <list default="true" id="5242420c-97f8-4167-96c2-b87a34423194" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
