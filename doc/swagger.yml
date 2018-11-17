@@ -1,0 +1,185 @@
+swagger: "2.0"
+info:
+  description: "API for BTC adapter service"
+  version: "0.0.1"
+  title: "BTC adapter"
+host: "btc-adapter.bankex.com"
+#basePath: "/v1"
+schemes:
+- "http"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /api/v1/help:
+    get:
+      summary: Service API documentation
+      description: |
+        Swagger documentation rendered by ReDoc
+      produces:
+      - text/html
+      responses:
+        200:
+          description: Documentation page
+      tags:
+  /api/v1/account/new?account={account}:
+    get:
+      summary: "Returns new account"
+      parameters:
+      - name: "account"
+        in: "path"
+        description: "name of account"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "new account"
+          schema:
+            type: "object"
+            properties:
+              service:
+                $ref: "#/definitions/NewAccount"
+        500:
+          description: "Something went wrong"
+      tags:
+      - account
+  /api/v1/account/balance?account={account}:
+    get:
+      summary: "Returns balance for account"
+      parameters:
+      - name: "account"
+        in: "path"
+        description: "name of account"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "balance of account"
+          type: "int64"
+        500:
+          description: "Something went wrong"
+      tags:
+      - account
+  /api/v1/account/all:
+    get:
+      summary: "Returns a list of accounts on this node"
+      responses:
+        200:
+          description: "The list of accounts with amount"
+          type: "map[string]int64"
+        500:
+          description: "Something went wrong"
+      tags:
+      - address
+  /api/v1/address/all?account={account}:
+    get:
+      summary: "Returns all addresses for account"
+      parameters:
+      - name: "account"
+        in: "path"
+        description: "name of account"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "list of addresses"
+          type: "[]string"
+        500:
+          description: "Something went wrong"
+      tags:
+      - address
+  /api/v1/block/hash?height={height}:
+    get:
+      summary: "Returns block hash"
+      parameters:
+      - name: "height"
+        in: "path"
+        description: "height of block"
+        required: true
+        type: "int64"
+      responses:
+        200:
+          description: "hash of block"
+          type: "string"
+        500:
+          description: "Something went wrong"
+      tags:
+      - block
+  /api/v1/block?hash={hash}:
+    get:
+      summary: "Returns block by hash"
+      parameters:
+      - name: "hash"
+        in: "path"
+        description: "hash of block"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "block info"
+          schema:
+            type: "object"
+            properties:
+              service:
+                $ref: "#/definitions/GetBlockVerboseResult"
+        500:
+          description: "Something went wrong"
+      tags:
+      - block
+definitions:
+  NewAccount:
+    type: "object"
+    properties:
+      Name:
+        type: "string"
+      Address:
+        type: "string"
+      PrivKey:
+        type: "string"
+  GetBlockVerboseResult:
+    type: "object"
+    properties:
+      Hash:
+        type: "string"
+      Confirmations:
+        type: "uint64"
+      StrippedSize:
+        type: "int32"
+      Size:
+        type: "int32"
+      Weight:
+        type: "int32"
+      Height:
+        type: "int64"
+      Version:
+        type: "int32"
+      VersionHex:
+        type: "string"
+      MerkleRoot:
+        type: "string"
+      Tx:
+        type: "[]string "
+      Time:
+        type: "int64"
+      Nonce:
+        type: "uint32"
+      Bits:
+        type: "string"
+      Difficulty:
+        type: "float64"
+      PreviousHash:
+        type: "string"
+      NextHash:
+        type: "string"
+      RawTx:
+        type: "array"
+        items:
+          $ref: "#/definitions/TxRawResult"
+  TxRawResult:
+    type: "object"
+    properties:
+      Hash:
+        type: "string"
+
+
