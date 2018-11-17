@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/madhack/repositories"
+	"github.com/BankEx/madhack/repositories"
 )
 
 type HandlersService struct {

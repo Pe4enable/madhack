@@ -4,45 +4,58 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
+
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	Ticker string // BTC
-	Port   string //8000
+	Mongo           Mongo
+	TimeOffset      TimeOffset
+	Port            string
+	Interval        int    // Seconds
 }
 
-func LoadConfig(filePath string) (conf *Config, err error) {
-	viper.SetConfigFile(filePath)
+// For debug purposes
+type TimeOffset struct {
+	Years, Months, Days int
+}
 
+type Mongo struct {
+	Url        string
+	DB         string
+	Collection string
+}
+
+var config Config
+
+func Load(configFile string) (conf *Config, err error) {
+	viper.SetConfigFile(configFile)
 	err = viper.ReadInConfig()
 	if err != nil {
-		return
+		log.Panic("Fatal error config file:", err)
 	}
 
-	log.Printf("Read config")
-
 	conf = new(Config)
-	conf.Ticker = GetStringEnvValue("TICKER", viper.GetString("ticker"))
-	conf.Port = GetStringEnvValue("PORT", ":" + viper.GetString("port"))
-	//conf.StartBlockHeight = GetIntEnvValue("START_BLOCK_HEIGHT", viper.GetInt64("block"))
-	//conf.Confirmations = GetIntEnvValue("CONFIRM_COUNT", viper.GetInt64("confirmations"))
-	//
-	//conf.NodeType = GetStringEnvValue("NODE_TYPE", viper.GetString("node.type"))
-	//conf.NodeConn = new(rpcclient.ConnConfig)
-	//conf.NodeConn.Host = GetStringEnvValue("NODE_HOST_URL", viper.GetString("node.host"))
-	//conf.NodeConn.User = GetStringEnvValue("NODE_USER", viper.GetString("node.user"))
-	//conf.NodeConn.Pass = GetStringEnvValue("NODE_PASS", viper.GetString("node.pass"))
-	//conf.NodeConn.HTTPPostMode = true
-	//conf.NodeConn.DisableTLS = true
 
-	log.Printf("Read env config")
+	conf.Mongo.Url = GetStringEnvValue("MONGO_URL", viper.GetString("mongo.url"))
+	conf.Mongo.DB = GetStringEnvValue("MONGO_DB", viper.GetString("mongo.db"))
+	conf.Mongo.Collection = GetStringEnvValue("MONGO_COLLECTION", viper.GetString("mongo.collection"))
+
+	conf.Interval = GetIntEnvValue("INTERVAL", viper.GetInt("interval"))
+	// For debug purposes
+	conf.TimeOffset.Years = GetIntEnvValue("TIMEOFFSET_YEARS", viper.GetInt("timeoffset.years"))
+	conf.TimeOffset.Months = GetIntEnvValue("TIMEOFFSET_MONTHS", viper.GetInt("timeoffset.months"))
+	conf.TimeOffset.Days = GetIntEnvValue("TIMEOFFSET_DAYS", viper.GetInt("timeoffset.days"))
+
+	conf.Port = ":" + GetStringEnvValue("PORT", viper.GetString("port"))
+	log.Printf("Loaded config: %#v", conf)
 	return
 }
 
-func GetIntEnvValue(name string, defValue int64) (result int64) {
+func GetIntEnvValue(name string, defValue int) (result int) {
 	if startBlockHeight, ok := os.LookupEnv(name); ok {
-		s, err := strconv.ParseInt(startBlockHeight, 10, 64)
+		s, err := strconv.Atoi(startBlockHeight)
 		if err != nil {
 			log.Printf("ENV-%s not found, used default value %s", name, defValue)
 			return defValue
@@ -57,6 +70,15 @@ func GetIntEnvValue(name string, defValue int64) (result int64) {
 func GetStringEnvValue(name string, defValue string) (result string) {
 	if u, ok := os.LookupEnv(name); ok {
 		return u
+	} else {
+		log.Printf("ENV-%s not found, used default value '%s'", name, defValue)
+		return defValue
+	}
+}
+
+func GetStringArrayEncValue(name string, defValue []string) (result []string) {
+	if u, ok := os.LookupEnv(name); ok {
+		return strings.Fields(u)
 	} else {
 		log.Printf("ENV-%s not found, used default value '%s'", name, defValue)
 		return defValue

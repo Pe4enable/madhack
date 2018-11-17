@@ -1,11 +1,16 @@
 package main
 
 import (
-	. "./application/routers"
+	"github.com/BankEx/madhack/router"
+	"github.com/BankEx/madhack/config"
+	"github.com/BankEx/madhack/services"
+	"github.com/BankEx/madhack/repositories"
+	"github.com/BankEx/madhack/handlers"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 	"log"
 	"net/http"
+	"flag"
 )
 
 func main() {
@@ -18,21 +23,17 @@ func main() {
 		panic(err)
 	}
 
-	cache := make(chan ratestates.RateState, conf.Cache)
-
 	reader, err := services.New(conf)
 	if err != nil {
 		panic(err)
 	}
 	log.Printf("Rates reader is initialised")
-	go reader.Start(cache)
 
 	mongo, err := repositories.New(conf.Mongo)
 	if err != nil {
 		panic(err)
 	}
 	log.Printf("MongoWriter is initialised")
-	go mongo.Start(cache)
 
 	handlers := handlers.New(mongo)
 	r := router.New(handlers)

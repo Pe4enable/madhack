@@ -5,12 +5,10 @@ import (
 	"net/http"
 )
 
-func (s *HandlersService) GetLastRate(w http.ResponseWriter, r *http.Request) {
-	from := r.URL.Query().Get("from")
-	to := r.URL.Query().Get("to")
-	date := r.URL.Query().Get("date")
+func (s *HandlersService) GetItem(w http.ResponseWriter, r *http.Request) {
+	name := r.URL.Query().Get("name")
 
-	result, err := s.repository.GetRate(from, to, date)
+	result, err := s.repository.GetItem(name)
 
 	if err != nil {
 		log.Printf("Error during getting rate: %s.", err)
@@ -21,11 +19,9 @@ func (s *HandlersService) GetLastRate(w http.ResponseWriter, r *http.Request) {
 	jsonResponse(w, result, http.StatusOK)
 }
 
-func (s *HandlersService) GetLastAllRates(w http.ResponseWriter, r *http.Request) {
-	from := r.URL.Query().Get("from")
-	date := r.URL.Query().Get("date")
+func (s *HandlersService) GetAllItems(w http.ResponseWriter, r *http.Request) {
 
-	result, err := s.repository.GetAllRates(from, date)
+	result, err := s.repository.GetAllItems()
 
 	if err != nil {
 		log.Printf("Error during getting rate: %s.", err)

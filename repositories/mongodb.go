@@ -1,8 +1,7 @@
 package repositories
 
 import (
-	"strconv"
-	"github.com/madhack/config"
+	"github.com/BankEx/madhack/config"
 )
 
 type MongoRepository struct {

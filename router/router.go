@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/madhack/handlers"
+	"github.com/BankEx/madhack/handlers"
 	globalHandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
@@ -32,8 +32,8 @@ func defineRoutes(r *mux.Router, handlers *handlers.HandlersService) {
 }
 
 func addUnprotectedAPISubrouter(apiSubRouter *mux.Router, handlers *handlers.HandlersService) {
-	apiSubRouter.HandleFunc("/rates", handlers.GetLastRate).Methods("GET")
-	apiSubRouter.HandleFunc("/rates/all", handlers.GetLastAllRates).Methods("GET")
+	apiSubRouter.HandleFunc("/rates", handlers.GetItem).Methods("GET")
+	apiSubRouter.HandleFunc("/rates/all", handlers.GetAllItems).Methods("GET")
 
 	apiSubRouter.HandleFunc("/help", getHelp).Methods("GET")
 	apiSubRouter.HandleFunc("/swagger.yml", swagger).Methods("GET")
