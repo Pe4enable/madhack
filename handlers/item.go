@@ -3,12 +3,24 @@ package handlers
 import (
 	"log"
 	"net/http"
+	"encoding/json"
+	"github.com/BankEx/madhack/models"
+	"github.com/mongodb/mongo-go-driver/bson/objectid"
+	"time"
 )
 
-func (s *HandlersService) GetItem(w http.ResponseWriter, r *http.Request) {
-	name := r.URL.Query().Get("name")
+func (s *HandlersService) AddItem(w http.ResponseWriter, r *http.Request) {
+	item := models.Item{
+		ID:      objectid.New(),
+		Created: time.Now(),
+	}
 
-	result, err := s.repository.GetItem(name)
+	if err := json.NewDecoder(r.Body).Decode(&item); err != nil {
+		jsonErrorResponse(w, err, http.StatusBadRequest )
+		return
+	}
+
+	err := s.repository.AddItem(item)
 
 	if err != nil {
 		log.Printf("Error during getting rate: %s.", err)
@@ -16,7 +28,7 @@ func (s *HandlersService) GetItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jsonResponse(w, result, http.StatusOK)
+	jsonResponse(w, nil, http.StatusOK)
 }
 
 func (s *HandlersService) GetAllItems(w http.ResponseWriter, r *http.Request) {

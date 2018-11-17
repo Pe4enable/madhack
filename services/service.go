@@ -1,7 +1,6 @@
 package services
 
 import (
-	"log"
 	"time"
 
 	"github.com/BankEx/madhack/config"

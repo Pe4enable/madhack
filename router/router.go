@@ -32,8 +32,8 @@ func defineRoutes(r *mux.Router, handlers *handlers.HandlersService) {
 }
 
 func addUnprotectedAPISubrouter(apiSubRouter *mux.Router, handlers *handlers.HandlersService) {
-	apiSubRouter.HandleFunc("/rates", handlers.GetItem).Methods("GET")
-	apiSubRouter.HandleFunc("/rates/all", handlers.GetAllItems).Methods("GET")
+	apiSubRouter.HandleFunc("/item", handlers.AddItem).Methods("POST")
+	apiSubRouter.HandleFunc("/item/all", handlers.GetAllItems).Methods("GET")
 
 	apiSubRouter.HandleFunc("/help", getHelp).Methods("GET")
 	apiSubRouter.HandleFunc("/swagger.yml", swagger).Methods("GET")
